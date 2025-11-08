@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shadowless Scan Cleaner</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>🧼 Shadowless Scan Cleaner</h1>
+        <p>
+          Drop in a scanned PDF or a batch of photos—our Flask backend removes
+          the gray shadows so you get a sharp, print‑ready PDF.
+        </p>
+      </header>
+
+      <section class="upload-card">
+        <input
+          type="file"
+          id="pdfFile"
+          accept=".pdf,image/*"
+          multiple
+          hidden
+        />
+        <label for="pdfFile" class="drop-zone">
+          <strong>Select files</strong>
+          <span>PDF, PNG, JPG · multiple images become one PDF</span>
+        </label>
+
+        <p id="fileList" class="file-list">No files selected yet.</p>
+
+        <button type="button" id="uploadBtn">Clean Shadows</button>
+
+        <div class="status info" id="status">
+          Waiting for files to process.
+        </div>
+
+        <ul class="tips">
+          <li>For best results, crop out any desk or background edges.</li>
+          <li>Large PDFs may take a few seconds—keep this tab open.</li>
+          <li>Processed files download automatically as a single PDF.</li>
+        </ul>
+      </section>
+
+      <footer>
+        Built with Flask, OpenCV, and PyMuPDF &middot; runs locally on
+        <code>localhost:8080</code>
+      </footer>
+    </main>
+
+    <script>
+      const API_URL = "http://localhost:8080/upload";
+      const fileInput = document.getElementById("pdfFile");
+      const fileList = document.getElementById("fileList");
+      const statusEl = document.getElementById("status");
+      const uploadBtn = document.getElementById("uploadBtn");
+
+      const setStatus = (message, type = "info") => {
+        statusEl.textContent = message;
+        statusEl.className = `status ${type}`;
+      };
+
+      fileInput.addEventListener("change", () => {
+        if (!fileInput.files.length) {
+          fileList.textContent = "No files selected yet.";
+          setStatus("Waiting for files to process.", "info");
+          return;
+        }
+        const names = Array.from(fileInput.files)
+          .map((file) => file.name)
+          .join(", ");
+        fileList.textContent = names;
+        setStatus("Ready to clean. Hit the button when you're set!", "info");
+      });
+
+      const extractFilename = (header) => {
+        if (!header) return "cleaned.pdf";
+        const match = header.match(/filename=\"?([^\";]+)\"?/i);
+        return match ? match[1] : "cleaned.pdf";
+      };
+
+      const uploadPDF = async () => {
+        if (!fileInput.files.length) {
+          setStatus("Please select at least one PDF or image.", "error");
+          return;
+        }
+
+        const formData = new FormData();
+        Array.from(fileInput.files).forEach((file) =>
+          formData.append("file", file)
+        );
+
+        try {
+          uploadBtn.disabled = true;
+          uploadBtn.textContent = "Cleaning…";
+          setStatus("Uploading and removing shadows…", "info");
+
+          const response = await fetch(API_URL, {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || "Server error during processing.");
+          }
+
+          const blob = await response.blob();
+          const downloadUrl = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = downloadUrl;
+          a.download = extractFilename(response.headers.get("content-disposition"));
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(downloadUrl);
+
+          setStatus("✅ Shadows removed! Check your downloads.", "success");
+        } catch (error) {
+          console.error(error);
+          setStatus(
+            error.message || "Something went wrong during upload.",
+            "error"
+          );
+        } finally {
+          uploadBtn.disabled = false;
+          uploadBtn.textContent = "Clean Shadows";
+        }
+      };
+
+      uploadBtn.addEventListener("click", uploadPDF);
+    </script>
+  </body>
+</html>

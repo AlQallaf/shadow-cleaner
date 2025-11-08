@@ -1,0 +1,150 @@
+:root {
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #0b2545;
+  background-color: #eef2f7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
+  background: radial-gradient(circle at top, #fefefe 0%, #dde7f2 70%);
+}
+
+.container {
+  width: min(900px, 95vw);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+}
+
+header p {
+  margin: 0.5rem auto 0;
+  max-width: 42ch;
+  color: #4a628a;
+  line-height: 1.4;
+}
+
+.upload-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  box-shadow: 0 20px 40px rgba(15, 34, 58, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.drop-zone {
+  border: 2px dashed #7aa2ff;
+  border-radius: 16px;
+  padding: 2rem;
+  cursor: pointer;
+  color: #284b63;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.drop-zone:hover {
+  border-color: #2b7cff;
+  color: #0b2545;
+  background: rgba(43, 124, 255, 0.05);
+}
+
+.file-list {
+  margin: 0;
+  min-height: 1.5rem;
+  padding: 0.5rem 0.75rem;
+  background: #f5f7fb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #2f3e46;
+  word-break: break-word;
+}
+
+button {
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2b7cff, #5c8bff);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.85rem 1.5rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+button:hover:enabled {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status {
+  margin: 0.5rem 0 0;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  text-align: left;
+}
+
+.status.info {
+  background: #e7f0ff;
+  color: #1f4b99;
+}
+
+.status.success {
+  background: #e6f7ed;
+  color: #0f6b37;
+}
+
+.status.error {
+  background: #fdecec;
+  color: #a0111f;
+}
+
+.tips {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  color: #4d5e80;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.tips li::before {
+  content: "• ";
+  color: #2b7cff;
+  font-weight: 700;
+}
+
+footer {
+  font-size: 0.85rem;
+  color: #6c7a92;
+}
+
+footer code {
+  background: #f5f7fb;
+  padding: 0.1rem 0.4rem;
+  border-radius: 6px;
+  font-size: 0.85em;
+}
