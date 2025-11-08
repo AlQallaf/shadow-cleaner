@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+venv/
+.venv/
+
+# Environment files
+.env
+*.env
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Byte-compiled / cache
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Flask uploads & outputs
+uploads/
+outputs/
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# macOS system files
+.DS_Store
+
+# Archives
+*.zip
+*.tar
+*.gz
